@@ -19,8 +19,6 @@ public class DashboardViewModel : NotificationService
     public ICommand AddCommand{ get; set; }
     public ICommand GetAllCommand{ get; set; }
     public ICommand EditCommand { get; set; }
-    public ICommand CancelCommand { get; set; }
-    public ICommand SaveCommand { get; set; }
     public ICommand RemoveCommand { get; set; }
 
 
@@ -41,8 +39,6 @@ public class DashboardViewModel : NotificationService
         AddCommand = new RelayCommand(AddCar, CanAddCar);
         GetAllCommand = new RelayCommand(GetAllCars, CanAllCars);
         EditCommand = new RelayCommand(EditCar, CanEditCar);
-        CancelCommand = new RelayCommand(Cancel);
-        SaveCommand = new RelayCommand(Save, CanSave);
         RemoveCommand = new RelayCommand(Remove, CanRemove);
     }
 
@@ -56,34 +52,13 @@ public class DashboardViewModel : NotificationService
         return (int?)parameter != -1;
     }
 
-    public void Cancel(object? paramter)
-    {
-        
-        (paramter as Window)?.Close();
-    }
-
-    public void Save(object? paramter)
-    {
-        Cars.RemoveAt((int)paramter);
-        Cars.Insert((int)paramter, car);
-
-    }
-
-    public bool CanSave(object? parameter)
-    {
-        return !string.IsNullOrEmpty(car?.Make) &&
-           !string.IsNullOrEmpty(car?.Model) &&
-           !string.IsNullOrEmpty(car?.Year);
-    }
-
     public void EditCar(object? parameter)
     {
-        car = Cars[(int)parameter];
+        Car ?newCar = Cars[(int)parameter];
         EditView? editView = new EditView();
-        editView.saveButton.CommandParameter = parameter;
-        editView!.DataContext = this;
+        editView!.DataContext = new EditCarViewModel(newCar);
         editView.ShowDialog();
-        car = new();
+        
     }
 
     public bool CanEditCar(object? parameter)

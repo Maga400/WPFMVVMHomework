@@ -34,7 +34,6 @@
 
             <StackPanel HorizontalAlignment="Center"  Orientation="Horizontal" >
                 <Button
-                    x:Name="saveButton"
                  Command="{Binding SaveCommand}"
                  Width="100"  Margin="10" Content="save" />
 
